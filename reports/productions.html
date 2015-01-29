@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}Production Orders{% endblock %}</title>
+        <meta name="description" content="">
+        <meta name="author" content="Openlabs Technologies & Consulting (P) Ltd.">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
+        <style type="text/css">
+          .page-break {
+            padding-top: 10px;
+            page-break-before: always;
+          }
+          hr {
+            border-top: 1px solid #000;
+          }
+          .h2 {
+            font-size: 20px;
+          }
+          .h3 {
+            font-size: 16px;
+          }
+          .show-col {
+            border: 1px solid rgba(86,61,124,.2)
+          }
+          .font8 {
+            font-size: 8px;
+          }
+          body {
+            font-family: 'Lora', serif;
+            font-size: 10px;
+          }
+          th, td {
+            padding: 2px !important;
+          }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+              <div class="col-xs-6">
+                {% block company_header %}
+                {% endblock %}
+              </div>
+              <div class="col-xs-6">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <span class="h3">Production Orders</span>
+                  </div>
+                </div>
+                <div class="row" style="padding-top:20px;">
+                  <div class="col-xs-4">
+                    <strong>Date Range:</strong>
+                  </div>
+                  <div class="col-xs-8 text-capitalize">
+                    {{ data['start_date']|dateformat }} - {{ data['end_date']|dateformat }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <hr />
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <table class="table">
+                        <tr>
+                        {% for date in dates %}
+                            <td>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <th class="text-center text-uppercase" colspan="2" nowrap>{{ date|dateformat }} {{ date.strftime("%A")[:3] }}</th>
+                                    </thead>
+                                    <tbody class="font8">
+                                        {% for production in productions_by_date[date] %}
+                                            <tr class="
+                                                {% if production.state == 'draft' %}
+                                                    active
+                                                {% elif production.state == 'waiting' %}
+                                                    warning
+                                                {% elif production.state == 'assigned' %}
+                                                    info
+                                                {% elif production.state == 'running' %}
+                                                    success
+                                                {% endif %}
+                                            ">
+                                                <td>{{ production.product.code }} - {{ production.product.name }}</td>
+                                                <td class="text-right">
+                                                    {{ formatLang(production.quantity, user.lang, digits=production.unit_digits) }}
+                                                    {% if production.uom.symbol != 'u' %}
+                                                        {{ production.uom.symbol }}
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="2" class="danger">No productions found.</td>
+                                            <tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </td>
+                            {% if loop.index % 6 == 0 %}
+                                </tr><tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

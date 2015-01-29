@@ -13,5 +13,25 @@
         <field name="model">production,-1</field>
         <field name="action" ref="report_production"/>
     </record>
+
+    <record model="ir.action.report" id="report_productions">
+        <field name="name">Productions Report</field>
+        <field name="model"></field>
+        <field name="report_name">report.productions</field>
+        <field name="report">production_report/reports/productions.html</field>
+    </record>
+    <record model="ir.ui.view" id="report_productions_view_form">
+        <field name="model">report.productions.wizard.start</field>
+        <field name="type">form</field>
+        <field name="name">report_productions_form</field>
+    </record>
+    <record model="ir.action.wizard" id="wizard_productions_report">
+        <field name="name">Productions Report</field>
+        <field name="wiz_name">report.productions.wizard</field>
+    </record>
+    <menuitem parent="production.menu_production"
+        action="wizard_productions_report"
+        id="menu_productions_report" icon="tryton-spreadsheet"
+        sequence="100"/>
   </data>
 </tryton>

@@ -122,7 +122,7 @@ setup(
         'trytond.modules.%s' % MODULE: info.get('xml', [])
         + info.get('translation', [])
         + ['tryton.cfg', 'locale/*.po', 'tests/*.rst', '*.html']
-        + ['view/*.xml'],
+        + ['view/*.xml', 'reports/*.html'],
     },
     classifiers=[
         'Development Status :: 4 - Beta',
